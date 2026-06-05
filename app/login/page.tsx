@@ -11,6 +11,15 @@ export default function LoginPage() {
   const [message, setMessage] = useState("");
   const router = useRouter();
 
+  const getFriendlyError = (err: any) => {
+    const msg = err?.message || String(err);
+    if (msg.includes("timed out or was not allowed")) return "You cancelled the passkey prompt, or your device prevented it.";
+    if (msg.includes("User not found") || msg.includes("Authenticator not found")) return "Account not found. Please register first.";
+    if (msg.includes("already registered") || msg.includes("excludeCredentials")) return "This username is already registered. Please log in.";
+    if (msg.includes("Registration failed") || msg.includes("Verification failed")) return "Security verification failed. Please try again.";
+    return msg;
+  };
+
   const handleRegister = async () => {
     if (!username) return setMessage("Please enter a username");
     setLoading(true);
@@ -45,7 +54,7 @@ export default function LoginPage() {
       }
     } catch (err: any) {
       console.error(err);
-      setMessage(err.message || "An error occurred");
+      setMessage(getFriendlyError(err));
     } finally {
       setLoading(false);
     }
@@ -86,7 +95,7 @@ export default function LoginPage() {
       }
     } catch (err: any) {
       console.error(err);
-      setMessage(err.message || "An error occurred");
+      setMessage(getFriendlyError(err));
     } finally {
       setLoading(false);
     }
