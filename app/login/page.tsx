@@ -110,7 +110,7 @@ export default function LoginPage() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
-              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#004DFF]/20 focus:border-[#004DFF] transition-all"
+              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#004DFF]/20 focus:border-[#004DFF] transition-all text-black"
             />
           </div>
 
