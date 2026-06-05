@@ -18,13 +18,13 @@ const cardData = [
   { id: 10, image: "/meditation.png", category: "Education", title: "Marketing Seminar", price: "45.0", time: "09:00-17:00", guests: "200 guests", location: "Convention Center", startsIn: "2 weeks" },
 ];
 
-const Card = ({ card, active, removeCard, zIndex, offsetIndex }) => {
+const Card = ({ card, active, removeCard, zIndex, offsetIndex }: any) => {
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-10, 10]);
   const opacity = useTransform(x, [-200, -150, 0, 150, 200], [0, 1, 1, 1, 0]);
   const exitDirectionRef = useRef("right");
 
-  const handleDragEnd = (event, info) => {
+  const handleDragEnd = (event: any, info: any) => {
     if (info.offset.x > 100 || info.velocity.x > 500) {
       exitDirectionRef.current = "right";
       removeCard(card.id, "right");
@@ -55,12 +55,12 @@ const Card = ({ card, active, removeCard, zIndex, offsetIndex }) => {
         y: active ? 0 : offsetIndex * 50 
       }}
       transition={{ duration: 0.4, type: "spring", stiffness: 300, damping: 20 }}
-      exit={(ref) => ({ 
+      exit={((ref: any) => ({ 
         x: ref.current === "right" ? 1000 : -1000, 
         opacity: 0,
         rotate: ref.current === "right" ? 20 : -20,
         transition: { duration: 0.4, ease: "easeOut" } 
-      })}
+      })) as any}
     >
       {/* Overlay for inactive cards to look like a solid stacked grey card */}
       <motion.div
@@ -134,7 +134,7 @@ const Card = ({ card, active, removeCard, zIndex, offsetIndex }) => {
 export default function CardStack() {
   const [cards, setCards] = useState(cardData);
 
-  const removeCard = (id, direction) => {
+  const removeCard = (id: number, direction: string) => {
     setCards((prev) => prev.filter((card) => card.id !== id));
   };
 

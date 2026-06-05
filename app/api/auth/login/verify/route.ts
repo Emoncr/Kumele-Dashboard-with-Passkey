@@ -29,7 +29,7 @@ export async function POST(req: Request) {
         expectedRPID: rpID,
         credential: {
           id: authenticator.credentialID,
-          publicKey: authenticator.credentialPublicKey,
+          publicKey: authenticator.credentialPublicKey as any,
           counter: authenticator.counter,
           transports: authenticator.transports as any,
         },
