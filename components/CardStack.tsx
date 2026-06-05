@@ -25,11 +25,10 @@ const Card = ({ card, active, removeCard, zIndex, offsetIndex }: any) => {
   const exitDirectionRef = useRef("right");
 
   const handleDragEnd = (event: any, info: any) => {
-    // Reduced thresholds to make swiping easier and require less force
-    if (info.offset.x > 50 || info.velocity.x > 200) {
+    if (info.offset.x > 100 || info.velocity.x > 500) {
       exitDirectionRef.current = "right";
       removeCard(card.id, "right");
-    } else if (info.offset.x < -50 || info.velocity.x < -200) {
+    } else if (info.offset.x < -100 || info.velocity.x < -500) {
       exitDirectionRef.current = "left";
       removeCard(card.id, "left");
     }
