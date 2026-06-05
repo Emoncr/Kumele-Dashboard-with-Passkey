@@ -29,26 +29,23 @@ type DbSchema = {
   authenticators: AuthenticatorModel[];
 };
 
-const DB_FILE = path.join(process.cwd(), "db.json");
+// Use a global variable to persist across hot reloads in dev, 
+// and avoid EROFS read-only errors on Vercel Serverless Functions.
+declare global {
+  var _mockDb: DbSchema | undefined;
+}
+
+const initialData: DbSchema = { users: [], authenticators: [] };
 
 function readDb(): DbSchema {
-  if (!fs.existsSync(DB_FILE)) {
-    return { users: [], authenticators: [] };
+  if (!global._mockDb) {
+    global._mockDb = initialData;
   }
-  const data = fs.readFileSync(DB_FILE, "utf-8");
-  const parsed = JSON.parse(data);
-  
-  // Convert credentialPublicKey back to Uint8Array
-  parsed.authenticators = parsed.authenticators.map((auth: any) => ({
-    ...auth,
-    credentialPublicKey: new Uint8Array(Object.values(auth.credentialPublicKey))
-  }));
-  
-  return parsed;
+  return global._mockDb;
 }
 
 function writeDb(data: DbSchema) {
-  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+  global._mockDb = data;
 }
 
 export const db = {
