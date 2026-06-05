@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { generateAuthenticationOptions } from "@simplewebauthn/server";
 import { db } from "@/app/lib/db";
 
-const rpID = "localhost";
+const rpID = process.env.NODE_ENV === "production" ? "kumele-dashboard.vercel.app" : "localhost";
 
 export async function POST(req: Request) {
   try {

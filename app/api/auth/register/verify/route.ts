@@ -3,8 +3,8 @@ import { verifyRegistrationResponse } from "@simplewebauthn/server";
 import { db } from "@/app/lib/db";
 import { createSession } from "@/app/lib/session";
 
-const rpID = "localhost";
-const expectedOrigin = "http://localhost:3000";
+const rpID = process.env.NODE_ENV === "production" ? "kumele-dashboard.vercel.app" : "localhost";
+const expectedOrigin = process.env.NODE_ENV === "production" ? "https://kumele-dashboard.vercel.app" : "http://localhost:3000";
 
 export async function POST(req: Request) {
   try {

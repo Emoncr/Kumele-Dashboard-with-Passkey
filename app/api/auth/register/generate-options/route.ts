@@ -3,9 +3,9 @@ import { generateRegistrationOptions } from "@simplewebauthn/server";
 import { db } from "@/app/lib/db";
 import { v4 as uuidv4 } from "uuid";
 
-// We use localhost for dev
+// We use localhost for dev, and vercel domain for production
 const rpName = "Kumele Dashboard";
-const rpID = "localhost";
+const rpID = process.env.NODE_ENV === "production" ? "kumele-dashboard.vercel.app" : "localhost";
 
 export async function POST(req: Request) {
   try {
