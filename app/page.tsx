@@ -20,6 +20,8 @@ import { useRouter } from "next/navigation";
 export default function Dashboard() {
   const [selectedYear, setSelectedYear] = useState("2022");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const years = ["2022", "2023", "2024"];
   const router = useRouter();
 
@@ -52,7 +54,10 @@ export default function Dashboard() {
       {/* Header */}
       <header className="h-[72px] bg-white flex items-center justify-between px-4 md:px-6 border-b border-gray-200 shrink-0 z-20 relative">
         <div className="flex items-center gap-2 md:gap-4">
-          <button className="md:hidden text-gray-800 p-1">
+          <button 
+            className="md:hidden text-gray-800 p-1"
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          >
             <Menu className="w-6 h-6" />
           </button>
           {/* Logo SVG */}
@@ -60,26 +65,72 @@ export default function Dashboard() {
             <Image src="/logo.png" alt="Logo" width={120} height={50} />
           </div>
         </div>
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={handleLogout}
-            className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors hidden md:block"
+        <div className="flex items-center gap-4 relative">
+          <div 
+            className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden bg-pink-100 flex items-center justify-center shrink-0 cursor-pointer"
+            onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
           >
-            Log out
-          </button>
-          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden bg-pink-100 flex items-center justify-center shrink-0">
             <img
               src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=ffdfbf"
               alt="User Avatar"
               className="w-full h-full object-cover"
             />
           </div>
+
+          <AnimatePresence>
+            {isProfileDropdownOpen && (
+              <>
+                <div 
+                  className="fixed inset-0 z-40" 
+                  onClick={() => setIsProfileDropdownOpen(false)} 
+                />
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute right-0 top-12 md:top-14 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50"
+                >
+                  <button 
+                    onClick={() => router.push("/swiper")}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors"
+                  >
+                    Swiper View
+                  </button>
+                  <button 
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition-colors"
+                  >
+                    Account Settings
+                  </button>
+                  <div className="h-px bg-gray-100 my-1"></div>
+                  <button 
+                    onClick={handleLogout}
+                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                  >
+                    Log out
+                  </button>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </div>
       </header>
 
       <div className="flex flex-1 overflow-hidden relative">
+        {/* Mobile Sidebar Overlay */}
+        <AnimatePresence>
+          {isSidebarOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="md:hidden absolute inset-0 bg-black/20 z-40"
+              onClick={() => setIsSidebarOpen(false)}
+            />
+          )}
+        </AnimatePresence>
+
         {/* Sidebar */}
-        <aside className="hidden md:flex w-[72px] bg-white flex-col items-center py-6 gap-8 shrink-0 relative z-10 shadow-[2px_0_10px_rgba(0,0,0,0.02)]">
+        <aside className={`${isSidebarOpen ? "flex absolute h-full z-50" : "hidden"} md:flex w-[72px] bg-white flex-col items-center py-6 gap-8 shrink-0 md:relative md:z-10 shadow-[2px_0_10px_rgba(0,0,0,0.02)] transition-all`}>
           <button className="text-gray-800 hover:text-black transition-colors">
             <Home className="w-6 h-6 fill-gray-800" />
           </button>
