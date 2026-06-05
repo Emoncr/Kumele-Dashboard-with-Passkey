@@ -15,11 +15,18 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
   const [selectedYear, setSelectedYear] = useState("2022");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const years = ["2022", "2023", "2024"];
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -53,12 +60,20 @@ export default function Dashboard() {
             <Image src="/logo.png" alt="Logo" width={120} height={50} />
           </div>
         </div>
-        <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden bg-pink-100 flex items-center justify-center shrink-0">
-          <img
-            src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=ffdfbf"
-            alt="User Avatar"
-            className="w-full h-full object-cover"
-          />
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={handleLogout}
+            className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors hidden md:block"
+          >
+            Log out
+          </button>
+          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden bg-pink-100 flex items-center justify-center shrink-0">
+            <img
+              src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=ffdfbf"
+              alt="User Avatar"
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
       </header>
 
@@ -106,7 +121,7 @@ export default function Dashboard() {
             className="bg-white rounded-xl shadow-sm border border-gray-100 w-full h-[85vh] overflow-y-auto flex flex-col mx-auto"
           >
             {/* Card Header */}
-            <div className="px-6 py-5 md:px-8 md:py-6 border-b border-gray-100">
+            <div className="px-6 py-5 md:px-8 md:py-6 border-b border-[#EEECEC]">
               <h1 className="text-[18px] md:text-[22px] font-semibold text-black">
                 History & Statistics
               </h1>
